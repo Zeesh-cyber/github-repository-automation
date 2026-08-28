@@ -1,5 +1,7 @@
 # GitHub Repository Automation
 
+[![Python Tests](https://github.com/Zeesh-cyber/github-repository-automation/actions/workflows/python-tests.yml/badge.svg)](https://github.com/Zeesh-cyber/github-repository-automation/actions/workflows/python-tests.yml)
+
 A Python automation tool that searches GitHub repositories using the GitHub REST API, filters repositories based on their star count, and generates reports in JSON, CSV, and TXT formats.
 
 ## Overview
@@ -34,11 +36,16 @@ The application accepts search criteria from the user, communicates with the Git
 - Pytest
 - Git
 - GitHub
+- GitHub Actions
 
 ## Project Structure
 
 ~~~text
 github-repository-automation/
+│
+├── .github/
+│   └── workflows/
+│       └── python-tests.yml
 │
 ├── tests/
 │   └── test_github_pipeline.py
@@ -166,6 +173,19 @@ The test suite verifies:
 
 **5 passed**
 
+## Continuous Integration
+
+This project uses GitHub Actions to automatically run the test suite when changes are pushed to the `main` branch or when a pull request targets the `main` branch.
+
+The workflow:
+
+1. Checks out the repository
+2. Sets up Python 3.12
+3. Installs project dependencies
+4. Runs the complete pytest test suite
+
+A successful workflow run confirms that the automated tests are passing.
+
 ## Error Handling
 
 The application handles common problems such as:
@@ -194,6 +214,7 @@ This project demonstrates practical experience with:
 - File handling
 - Date and time handling
 - Automated testing with pytest
+- GitHub Actions CI
 - Git version control
 - GitHub repository management
 
@@ -207,7 +228,7 @@ Possible future improvements include:
 - Logging
 - Configuration files
 - More extensive automated testing
-- GitHub Actions CI/CD
+- GitHub Actions CI/CD improvements
 - Scheduled repository searches
 - Additional report formats
 - Web-based interface
