@@ -1,5 +1,3 @@
-import requests
-
 from github_pipeline_functions import (
     search_github,
     filter_repositories,
@@ -37,6 +35,21 @@ def get_non_negative_integer(message):
             print("Please enter a valid number.")
 
 
+def get_language():
+    while True:
+        language = input(
+            "Programming language (optional, press Enter to skip): "
+        ).strip()
+
+        if language == "":
+            return None
+
+        if language.replace("-", "").replace("_", "").isalnum():
+            return language
+
+        print("Please enter a valid programming language.")
+
+
 def get_report_choice():
     while True:
         print("\nChoose a report format:")
@@ -53,7 +66,9 @@ def get_report_choice():
         print("Please enter a number between 1 and 4.")
 
 
-query = input("What do you want to search for on GitHub? ")
+query = input(
+    "What do you want to search for on GitHub? "
+).strip()
 
 number = get_positive_integer(
     "How many repositories do you want? "
@@ -63,12 +78,19 @@ minimum_stars = get_non_negative_integer(
     "Minimum number of stars? "
 )
 
+language = get_language()
 
 print("\nSearching GitHub...")
 
-repositories = search_github(query, number)
+repositories = search_github(
+    query,
+    number,
+    language
+)
 
-print(f"Found {len(repositories)} repositories.")
+print(
+    f"Found {len(repositories)} repositories."
+)
 
 print("Filtering repositories...")
 
@@ -78,8 +100,10 @@ filtered_repositories = filter_repositories(
 )
 
 print(
-    f"{len(filtered_repositories)} repositories matched your criteria."
+    f"{len(filtered_repositories)} "
+    "repositories matched your criteria."
 )
+
 choice = get_report_choice()
 
 

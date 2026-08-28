@@ -3,8 +3,6 @@ import os
 import json
 import csv
 
-from unittest.mock import patch, Mock
-
 sys.path.insert(
     0,
     os.path.abspath(
@@ -24,34 +22,83 @@ from github_pipeline_functions import (
 )
 
 
-@patch("github_pipeline_functions.requests.get")
-def test_search_github(mock_get):
-    mock_response = Mock()
+def test_search_github_without_language(monkeypatch):
+    class MockResponse:
+        status_code = 200
 
-    mock_response.status_code = 200
+        def raise_for_status(self):
+            pass
 
-    mock_response.json.return_value = {
-        "items": [
-            {
-                "full_name": "test/repository",
-                "stargazers_count": 100
-            },
-            {
-                "full_name": "test/another-repository",
-                "stargazers_count": 80
+        def json(self):
+            return {
+                "items": [
+                    {
+                        "full_name": "test/repository",
+                        "stargazers_count": 100
+                    }
+                ]
             }
-        ]
-    }
 
-    mock_get.return_value = mock_response
+    def mock_get(url, params, timeout):
+        assert params["q"] == "AI automation"
+        assert params["sort"] == "stars"
+        assert params["order"] == "desc"
+        assert timeout == 10
+        return MockResponse()
 
-    result = search_github("python", 2)
+    monkeypatch.setattr(
+        "github_pipeline_functions.requests.get",
+        mock_get
+    )
 
-    assert len(result) == 2
+    result = search_github(
+        "AI automation",
+        10
+    )
+
+    assert len(result) == 1
     assert result[0]["full_name"] == "test/repository"
-    assert result[1]["full_name"] == "test/another-repository"
 
-    mock_get.assert_called_once()
+
+def test_search_github_with_language(monkeypatch):
+    class MockResponse:
+        status_code = 200
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {
+                "items": [
+                    {
+                        "full_name": "test/python-ai",
+                        "stargazers_count": 500,
+                        "language": "Python"
+                    }
+                ]
+            }
+
+    def mock_get(url, params, timeout):
+        assert params["q"] == "AI automation language:Python"
+        assert params["sort"] == "stars"
+        assert params["order"] == "desc"
+        assert timeout == 10
+        return MockResponse()
+
+    monkeypatch.setattr(
+        "github_pipeline_functions.requests.get",
+        mock_get
+    )
+
+    result = search_github(
+        "AI automation",
+        10,
+        "Python"
+    )
+
+    assert len(result) == 1
+    assert result[0]["full_name"] == "test/python-ai"
+    assert result[0]["language"] == "Python"
 
 
 def test_filter_repositories():
@@ -66,7 +113,10 @@ def test_filter_repositories():
         }
     ]
 
-    result = filter_repositories(repositories, 50)
+    result = filter_repositories(
+        repositories,
+        50
+    )
 
     assert len(result) == 1
     assert result[0]["full_name"] == "test/high-stars"

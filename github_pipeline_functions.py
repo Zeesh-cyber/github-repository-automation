@@ -4,13 +4,20 @@ import csv
 import os
 from datetime import datetime
 
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-def search_github(query, number):
+
+def search_github(query, number, language=None):
     url = "https://api.github.com/search/repositories"
 
+    search_query = query
+
+    if language:
+        search_query += f" language:{language}"
+
     params = {
-        "q": query,
+        "q": search_query,
         "sort": "stars",
         "order": "desc"
     }
@@ -51,18 +58,28 @@ def filter_repositories(repositories, minimum_stars):
 
 
 def save_json(repositories):
-    file_path = os.path.join(BASE_DIR, "pipeline_results.json")
+    file_path = os.path.join(
+        BASE_DIR,
+        "pipeline_results.json"
+    )
 
     with open(
         file_path,
         "w",
         encoding="utf-8"
     ) as file:
-        json.dump(repositories, file, indent=4)
+        json.dump(
+            repositories,
+            file,
+            indent=4
+        )
 
 
 def save_csv(repositories):
-    file_path = os.path.join(BASE_DIR, "pipeline_results.csv")
+    file_path = os.path.join(
+        BASE_DIR,
+        "pipeline_results.csv"
+    )
 
     with open(
         file_path,
@@ -92,7 +109,10 @@ def save_csv(repositories):
 def create_report(repositories):
     current_time = datetime.now()
 
-    file_path = os.path.join(BASE_DIR, "pipeline_report.txt")
+    file_path = os.path.join(
+        BASE_DIR,
+        "pipeline_report.txt"
+    )
 
     with open(
         file_path,
@@ -100,8 +120,12 @@ def create_report(repositories):
         encoding="utf-8"
     ) as file:
 
-        file.write("GITHUB AUTOMATION REPORT\n")
-        file.write("========================\n\n")
+        file.write(
+            "GITHUB AUTOMATION REPORT\n"
+        )
+        file.write(
+            "========================\n\n"
+        )
 
         file.write(
             f"Generated on: "
@@ -109,52 +133,27 @@ def create_report(repositories):
         )
 
         file.write(
-            f"Total repositories: {len(repositories)}\n\n"
+            f"Total repositories: "
+            f"{len(repositories)}\n\n"
         )
 
         for repo in repositories:
             file.write(
                 f"Repository: {repo['full_name']}\n"
             )
+
             file.write(
                 f"Stars: {repo['stargazers_count']}\n"
             )
+
             file.write(
                 f"Language: {repo['language']}\n"
             )
+
             file.write(
                 f"URL: {repo['html_url']}\n"
             )
-            file.write("------------------------\n")
 
-
-if __name__ == "__main__":
-
-    query = input("What do you want to search for on GitHub? ")
-
-    try:
-        number = int(input("How many repositories do you want? "))
-        minimum_stars = int(input("Minimum number of stars? "))
-
-        if number <= 0 or minimum_stars < 0:
-            print("Please enter valid numbers.")
-
-        else:
-            repositories = search_github(query, number)
-
-            filtered_repositories = filter_repositories(
-                repositories,
-                minimum_stars
+            file.write(
+                "------------------------\n"
             )
-
-            save_json(filtered_repositories)
-            save_csv(filtered_repositories)
-            create_report(filtered_repositories)
-
-            print("\nPipeline completed successfully!")
-            print("JSON: pipeline_results.json")
-            print("CSV: pipeline_results.csv")
-            print("Report: pipeline_report.txt")
-
-    except ValueError:
-        print("Please enter valid numbers.")
