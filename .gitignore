@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.vscode/
+
+pipeline_results.json
+pipeline_results.csv
+pipeline_report.txt
