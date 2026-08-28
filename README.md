@@ -1,6 +1,7 @@
 # GitHub Repository Automation
 
 [![Python Tests](https://github.com/Zeesh-cyber/github-repository-automation/actions/workflows/python-tests.yml/badge.svg)](https://github.com/Zeesh-cyber/github-repository-automation/actions/workflows/python-tests.yml)
+
 A Python automation tool that searches GitHub repositories using the GitHub REST API, filters and sorts repositories based on user-defined criteria, and generates downloadable reports in JSON, CSV, and TXT formats.
 
 ## 🌐 Live Demo
@@ -173,6 +174,8 @@ The web application provides:
 - Report format selection
 - Individual report downloads
 - Combined ZIP report download
+- Current report generation timestamp
+- Professional 3D-inspired user interface
 
 ## 📊 Report Formats
 
@@ -182,7 +185,9 @@ Structured repository data suitable for applications, scripts, and further autom
 
 Generated file:
 
-`pipeline_results.json`
+```text
+pipeline_results.json
+```
 
 ### CSV
 
@@ -190,7 +195,9 @@ Tabular repository data suitable for spreadsheets and data analysis.
 
 Generated file:
 
-`pipeline_results.csv`
+```text
+pipeline_results.csv
+```
 
 ### TXT
 
@@ -198,7 +205,9 @@ Human-readable repository summary containing repository information and report g
 
 Generated file:
 
-`pipeline_report.txt`
+```text
+pipeline_report.txt
+```
 
 ### All Reports
 
@@ -206,13 +215,19 @@ The Streamlit application can package all three reports into a single ZIP archiv
 
 Generated file:
 
-`github_repository_reports.zip`
+```text
+github_repository_reports.zip
+```
 
 The ZIP contains:
 
-- `pipeline_report.txt`
-- `pipeline_results.csv`
-- `pipeline_results.json`
+```text
+pipeline_report.txt
+pipeline_results.csv
+pipeline_results.json
+```
+
+The reports generated from a search use the current report-generation timestamp, and the ZIP contains those same generated report contents.
 
 ## 🧪 Testing
 
@@ -236,7 +251,9 @@ The test suite verifies functionality including:
 
 ### Current Test Result
 
-**7 tests passed**
+```text
+7 passed
+```
 
 ## ⚙️ Continuous Integration
 
@@ -244,7 +261,9 @@ GitHub Actions automatically runs the test suite when changes are pushed to the 
 
 Workflow file:
 
-`.github/workflows/python-tests.yml`
+```text
+.github/workflows/python-tests.yml
+```
 
 The workflow:
 
@@ -351,7 +370,8 @@ The repository keeps source code, tests, configuration, documentation, and CI wo
 - Public Streamlit deployment
 - Downloadable JSON, CSV, and TXT reports
 - Combined ZIP report download
-- Final repository presentation
+- Current report timestamp handling
+- Professional 3D-inspired UI
 
 ## 🔮 Future Improvements
 
