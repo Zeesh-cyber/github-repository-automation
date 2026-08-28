@@ -8,7 +8,13 @@ from datetime import datetime
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
-def search_github(query, number, language=None):
+def search_github(
+    query,
+    number,
+    language=None,
+    sort_by="stars",
+    minimum_stars=0
+):
     url = "https://api.github.com/search/repositories"
 
     search_query = query
@@ -16,32 +22,64 @@ def search_github(query, number, language=None):
     if language:
         search_query += f" language:{language}"
 
-    params = {
-        "q": search_query,
-        "sort": "stars",
-        "order": "desc"
+    if minimum_stars > 0:
+        search_query += f" stars:>={minimum_stars}"
+
+    allowed_sort_options = {
+        "stars": "stars",
+        "forks": "forks",
+        "updated": "updated"
     }
 
-    try:
-        response = requests.get(
-            url,
-            params=params,
-            timeout=10
-        )
+    sort = allowed_sort_options.get(
+        sort_by,
+        "stars"
+    )
 
-        if response.status_code == 403:
-            print("GitHub API rate limit reached.")
-            return []
+    repositories = []
+    page = 1
 
-        response.raise_for_status()
+    while len(repositories) < number:
+        params = {
+            "q": search_query,
+            "sort": sort,
+            "order": "desc",
+            "per_page": 100,
+            "page": page
+        }
 
-        data = response.json()
+        try:
+            response = requests.get(
+                url,
+                params=params,
+                timeout=10
+            )
 
-        return data["items"][:number]
+            if response.status_code == 403:
+                print("GitHub API rate limit reached.")
+                return repositories[:number]
 
-    except requests.exceptions.RequestException:
-        print("Could not connect to GitHub.")
-        return []
+            response.raise_for_status()
+
+            data = response.json()
+
+            items = data.get("items", [])
+
+            if not items:
+                break
+
+            repositories.extend(items)
+
+            if len(items) < 100:
+                break
+
+            page += 1
+
+        except requests.exceptions.RequestException:
+            print("Could not connect to GitHub.")
+            return repositories[:number]
+
+    return repositories[:number]
 
 
 def filter_repositories(repositories, minimum_stars):
@@ -123,6 +161,7 @@ def create_report(repositories):
         file.write(
             "GITHUB AUTOMATION REPORT\n"
         )
+
         file.write(
             "========================\n\n"
         )

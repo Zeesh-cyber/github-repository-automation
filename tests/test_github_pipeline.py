@@ -43,6 +43,8 @@ def test_search_github_without_language(monkeypatch):
         assert params["q"] == "AI automation"
         assert params["sort"] == "stars"
         assert params["order"] == "desc"
+        assert params["per_page"] == 100
+        assert params["page"] == 1
         assert timeout == 10
         return MockResponse()
 
@@ -82,6 +84,8 @@ def test_search_github_with_language(monkeypatch):
         assert params["q"] == "AI automation language:Python"
         assert params["sort"] == "stars"
         assert params["order"] == "desc"
+        assert params["per_page"] == 100
+        assert params["page"] == 1
         assert timeout == 10
         return MockResponse()
 
@@ -99,6 +103,75 @@ def test_search_github_with_language(monkeypatch):
     assert len(result) == 1
     assert result[0]["full_name"] == "test/python-ai"
     assert result[0]["language"] == "Python"
+
+
+def test_search_github_pagination(monkeypatch):
+    page_one_items = []
+
+    for number in range(1, 101):
+        page_one_items.append(
+            {
+                "full_name": f"test/repository-{number}",
+                "stargazers_count": 1000 - number
+            }
+        )
+
+    page_two_items = [
+        {
+            "full_name": "test/repository-101",
+            "stargazers_count": 899
+        }
+    ]
+
+    call_count = 0
+
+    class MockResponse:
+        status_code = 200
+
+        def __init__(self, items):
+            self.items = items
+
+        def raise_for_status(self):
+            pass
+
+        def json(self):
+            return {
+                "items": self.items
+            }
+
+    def mock_get(url, params, timeout):
+        nonlocal call_count
+
+        call_count += 1
+
+        assert params["q"] == "AI automation"
+        assert params["sort"] == "stars"
+        assert params["order"] == "desc"
+        assert params["per_page"] == 100
+        assert timeout == 10
+
+        if call_count == 1:
+            assert params["page"] == 1
+            return MockResponse(page_one_items)
+
+        assert params["page"] == 2
+        return MockResponse(page_two_items)
+
+    monkeypatch.setattr(
+        "github_pipeline_functions.requests.get",
+        mock_get
+    )
+
+    result = search_github(
+        "AI automation",
+        101
+    )
+
+    assert call_count == 2
+    assert len(result) == 101
+    assert result[0]["full_name"] == "test/repository-1"
+    assert result[99]["full_name"] == "test/repository-100"
+    assert result[100]["full_name"] == "test/repository-101"
 
 
 def test_filter_repositories():

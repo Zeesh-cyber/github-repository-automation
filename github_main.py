@@ -50,6 +50,27 @@ def get_language():
         print("Please enter a valid programming language.")
 
 
+def get_sort_choice():
+    while True:
+        print("\nChoose how to sort repositories:")
+        print("1. Stars")
+        print("2. Forks")
+        print("3. Recently Updated")
+
+        choice = input("Enter your choice (1-3): ")
+
+        sort_options = {
+            "1": "stars",
+            "2": "forks",
+            "3": "updated"
+        }
+
+        if choice in sort_options:
+            return sort_options[choice]
+
+        print("Please enter a number between 1 and 3.")
+
+
 def get_report_choice():
     while True:
         print("\nChoose a report format:")
@@ -80,12 +101,16 @@ minimum_stars = get_non_negative_integer(
 
 language = get_language()
 
+sort_by = get_sort_choice()
+
 print("\nSearching GitHub...")
 
 repositories = search_github(
     query,
     number,
-    language
+    language,
+    sort_by,
+    minimum_stars
 )
 
 print(
