@@ -3,9 +3,12 @@ import json
 import csv
 import os
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(
+    os.path.abspath(__file__)
+)
 
 
 def search_github(
@@ -40,6 +43,7 @@ def search_github(
     page = 1
 
     while len(repositories) < number:
+
         params = {
             "q": search_query,
             "sort": sort,
@@ -49,6 +53,7 @@ def search_github(
         }
 
         try:
+
             response = requests.get(
                 url,
                 params=params,
@@ -63,7 +68,10 @@ def search_github(
 
             data = response.json()
 
-            items = data.get("items", [])
+            items = data.get(
+                "items",
+                []
+            )
 
             if not items:
                 break
@@ -76,26 +84,35 @@ def search_github(
             page += 1
 
         except requests.exceptions.RequestException:
+
             print("Could not connect to GitHub.")
+
             return repositories[:number]
 
     return repositories[:number]
 
 
-def filter_repositories(repositories, minimum_stars):
+def filter_repositories(
+    repositories,
+    minimum_stars
+):
     filtered = []
 
     for repo in repositories:
+
         if repo["stargazers_count"] >= minimum_stars:
             filtered.append(repo)
 
     if len(filtered) == 0:
-        print("No repositories matched your criteria.")
+        print(
+            "No repositories matched your criteria."
+        )
 
     return filtered
 
 
 def save_json(repositories):
+
     file_path = os.path.join(
         BASE_DIR,
         "pipeline_results.json"
@@ -106,6 +123,7 @@ def save_json(repositories):
         "w",
         encoding="utf-8"
     ) as file:
+
         json.dump(
             repositories,
             file,
@@ -114,6 +132,7 @@ def save_json(repositories):
 
 
 def save_csv(repositories):
+
     file_path = os.path.join(
         BASE_DIR,
         "pipeline_results.csv"
@@ -136,6 +155,7 @@ def save_csv(repositories):
         ])
 
         for repo in repositories:
+
             writer.writerow([
                 repo["full_name"],
                 repo["stargazers_count"],
@@ -145,7 +165,11 @@ def save_csv(repositories):
 
 
 def create_report(repositories):
-    current_time = datetime.now()
+
+    # Always generate the report timestamp in IST.
+    current_time = datetime.now(
+        ZoneInfo("Asia/Kolkata")
+    )
 
     file_path = os.path.join(
         BASE_DIR,
@@ -168,7 +192,7 @@ def create_report(repositories):
 
         file.write(
             f"Generated on: "
-            f"{current_time.strftime('%Y-%m-%d %H:%M:%S')}\n"
+            f"{current_time.strftime('%Y-%m-%d %H:%M:%S IST')}\n"
         )
 
         file.write(
@@ -177,20 +201,25 @@ def create_report(repositories):
         )
 
         for repo in repositories:
+
             file.write(
-                f"Repository: {repo['full_name']}\n"
+                f"Repository: "
+                f"{repo['full_name']}\n"
             )
 
             file.write(
-                f"Stars: {repo['stargazers_count']}\n"
+                f"Stars: "
+                f"{repo['stargazers_count']}\n"
             )
 
             file.write(
-                f"Language: {repo['language']}\n"
+                f"Language: "
+                f"{repo['language']}\n"
             )
 
             file.write(
-                f"URL: {repo['html_url']}\n"
+                f"URL: "
+                f"{repo['html_url']}\n"
             )
 
             file.write(
