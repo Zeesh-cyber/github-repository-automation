@@ -2,22 +2,27 @@
 
 [![Python Tests](https://github.com/Zeesh-cyber/github-repository-automation/actions/workflows/python-tests.yml/badge.svg)](https://github.com/Zeesh-cyber/github-repository-automation/actions/workflows/python-tests.yml)
 
-A Python automation tool that searches GitHub repositories using the GitHub REST API, filters repositories based on their star count, and generates reports in JSON, CSV, and TXT formats.
+A Python automation tool that searches GitHub repositories using the GitHub REST API, filters and sorts repositories based on user-defined criteria, supports pagination, and generates reports in JSON, CSV, and TXT formats.
 
 ## Overview
 
-This project demonstrates how Python can be used to automate GitHub data collection and reporting.
+This project demonstrates how Python can be used to automate GitHub data collection, repository filtering, sorting, pagination, testing, and reporting.
 
-The application accepts search criteria from the user, communicates with the GitHub REST API, filters the returned repositories, and generates structured reports automatically.
+The application accepts search criteria from the user, communicates with the GitHub REST API, retrieves repositories, applies the selected filters and sorting options, and generates structured reports automatically.
 
 ## Features
 
-- Search GitHub repositories using keywords
+- Search GitHub repositories using keywords or topics
 - Specify the number of repositories to retrieve
-- Sort search results by stars
 - Filter repositories by minimum star count
+- Filter repositories by programming language
+- Sort repositories by stars
+- Sort repositories by forks
+- Sort repositories by recently updated
+- Retrieve more than 100 repositories using API pagination
 - Validate user input
 - Handle API and request errors
+- Handle GitHub API rate limits
 - Set request timeout protection
 - Generate JSON reports
 - Generate CSV reports
@@ -25,6 +30,7 @@ The application accepts search criteria from the user, communicates with the Git
 - Include report generation date and time
 - Keep generated report files out of Git using `.gitignore`
 - Automated testing with pytest
+- Continuous integration with GitHub Actions
 
 ## Technologies Used
 
@@ -40,7 +46,7 @@ The application accepts search criteria from the user, communicates with the Git
 
 ## Project Structure
 
-~~~text
+```text
 github-repository-automation/
 │
 ├── .github/
@@ -55,7 +61,39 @@ github-repository-automation/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
-~~~
+```
+
+## Demo
+
+The application provides an interactive workflow for discovering GitHub repositories.
+
+### Example
+
+```text
+Search query: AI
+Number of repositories: 101
+Minimum stars: 0
+Language: None
+Sort: Recently Updated
+Report format: TXT
+```
+
+The application then searches GitHub, retrieves the requested repositories using pagination, applies the selected filters and sorting method, and generates the requested report.
+
+Example result:
+
+```text
+Found 101 repositories.
+101 repositories matched your criteria.
+Pipeline completed successfully!
+```
+
+Generated reports can be exported as:
+
+- JSON
+- CSV
+- TXT
+- All reports
 
 ## Installation
 
@@ -63,53 +101,56 @@ Follow these steps to install and run the project on your computer.
 
 ### 1. Clone the repository
 
-Open the [GitHub repository](https://github.com/Zeesh-cyber/github-repository-automation) or open a terminal or PowerShell window and run:
+Open a terminal or PowerShell window and run:
 
-~~~bash
+```bash
 git clone https://github.com/Zeesh-cyber/github-repository-automation.git
-~~~
+```
 
 ### 2. Open the project directory
 
-~~~bash
+```bash
 cd github-repository-automation
-~~~
+```
 
 ### 3. Create a virtual environment
 
-~~~bash
+```bash
 python -m venv .venv
-~~~
+```
 
 ### 4. Activate the virtual environment
 
 For Windows PowerShell:
 
-~~~powershell
+```powershell
 .\.venv\Scripts\Activate.ps1
-~~~
+```
 
 ### 5. Install dependencies
 
-~~~bash
+```bash
 pip install -r requirements.txt
-~~~
+```
 
 ## Usage
 
 Run the main Python program:
 
-~~~bash
+```bash
 python github_main.py
-~~~
+```
 
 The program will ask for:
 
 - GitHub search query
 - Number of repositories to retrieve
 - Minimum number of stars
+- Programming language
+- Sorting method
+- Report format
 
-The application then searches GitHub, filters the results, and automatically generates JSON, CSV, and TXT reports.
+The application then searches GitHub, retrieves the requested repositories, applies the selected filters and sorting options, and automatically generates the requested report.
 
 ## Report Formats
 
@@ -135,21 +176,29 @@ The TXT report includes the date and time when the report was generated.
 
 ## Example Workflow
 
-~~~text
+```text
 Enter GitHub search query
+        ↓
+Specify number of repositories
+        ↓
+Set minimum star count
+        ↓
+Select programming language
+        ↓
+Select sorting method
         ↓
 Search GitHub API
         ↓
 Retrieve repositories
         ↓
-Sort results by stars
+Use pagination when required
         ↓
-Filter by minimum stars
+Filter and sort results
         ↓
-Generate reports
+Generate report
         ↓
 JSON / CSV / TXT
-~~~
+```
 
 ## Testing
 
@@ -157,12 +206,16 @@ This project uses `pytest` for automated testing.
 
 Run the complete test suite with:
 
-~~~bash
+```bash
 python -m pytest
-~~~
+```
 
 The test suite verifies:
 
+- GitHub repository searching
+- Repository searching without a language filter
+- Repository searching with a language filter
+- API pagination
 - Repository star filtering
 - JSON file generation
 - CSV file generation
@@ -171,7 +224,9 @@ The test suite verifies:
 
 ### Current Test Result
 
-**5 passed**
+```text
+7 passed
+```
 
 ## Continuous Integration
 
@@ -180,7 +235,7 @@ This project uses GitHub Actions to automatically run the test suite when change
 The workflow:
 
 1. Checks out the repository
-2. Sets up Python 3.12
+2. Sets up Python
 3. Installs project dependencies
 4. Runs the complete pytest test suite
 
@@ -206,6 +261,7 @@ This project demonstrates practical experience with:
 - Functions and modular programming
 - REST API integration
 - HTTP requests
+- GitHub API usage
 - JSON data handling
 - CSV file generation
 - Text file generation
@@ -213,6 +269,9 @@ This project demonstrates practical experience with:
 - Input validation
 - File handling
 - Date and time handling
+- Repository filtering
+- Repository sorting
+- API pagination
 - Automated testing with pytest
 - GitHub Actions CI
 - Git version control
@@ -222,8 +281,7 @@ This project demonstrates practical experience with:
 
 Possible future improvements include:
 
-- GitHub API authentication
-- Pagination support
+- GitHub API authentication for higher API rate limits
 - Advanced repository filtering
 - Logging
 - Configuration files
@@ -235,6 +293,6 @@ Possible future improvements include:
 
 ## Author
 
-**Zeesh Gul**
+Zeeshan Hassan
 
-GitHub: [Zeesh-cyber](https://github.com/Zeesh-cyber)
+GitHub: https://github.com/Zeesh-cyber
