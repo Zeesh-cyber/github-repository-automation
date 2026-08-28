@@ -1,40 +1,50 @@
 # GitHub Repository Automation
 
 [![Python Tests](https://github.com/Zeesh-cyber/github-repository-automation/actions/workflows/python-tests.yml/badge.svg)](https://github.com/Zeesh-cyber/github-repository-automation/actions/workflows/python-tests.yml)
+A Python automation tool that searches GitHub repositories using the GitHub REST API, filters and sorts repositories based on user-defined criteria, and generates downloadable reports in JSON, CSV, and TXT formats.
 
-A Python automation tool that searches GitHub repositories using the GitHub REST API, filters and sorts repositories based on user-defined criteria, supports pagination, and generates reports in JSON, CSV, and TXT formats.
+## 🌐 Live Demo
 
-## Overview
+**Try the application:**  
+https://repository-automation.streamlit.app/
 
-This project demonstrates how Python can be used to automate GitHub data collection, repository filtering, sorting, pagination, testing, and reporting.
+The application is publicly deployed using Streamlit Community Cloud.
 
-The application accepts search criteria from the user, communicates with the GitHub REST API, retrieves repositories, applies the selected filters and sorting options, and generates structured reports automatically.
+## 📌 Overview
 
-## Features
+This project demonstrates how Python can be used to automate GitHub repository discovery, filtering, sorting, pagination, data collection, and report generation.
 
-- Search GitHub repositories using keywords or topics
-- Specify the number of repositories to retrieve
-- Filter repositories by minimum star count
-- Filter repositories by programming language
-- Sort repositories by stars
-- Sort repositories by forks
-- Sort repositories by recently updated
-- Retrieve more than 100 repositories using API pagination
-- Validate user input
-- Handle API and request errors
-- Handle GitHub API rate limits
-- Set request timeout protection
-- Generate JSON reports
-- Generate CSV reports
-- Generate TXT reports
-- Include report generation date and time
-- Keep generated report files out of Git using `.gitignore`
-- Automated testing with pytest
-- Continuous integration with GitHub Actions
+The project provides both:
 
-## Technologies Used
+- A command-line Python application
+- A Streamlit web interface
+
+Users can search GitHub repositories using keywords, specify the number of repositories to retrieve, filter by programming language and minimum stars, sort results, and download generated reports.
+
+## ✨ Features
+
+- 🔎 Search GitHub repositories using keywords
+- 🔢 Specify the number of repositories to retrieve
+- ⭐ Filter repositories by minimum star count
+- 💻 Filter repositories by programming language
+- 📊 Sort repositories by Stars, Forks, or Recently Updated
+- 📄 Support GitHub API pagination
+- 🔗 Open repositories directly on GitHub
+- 📋 Generate JSON reports
+- 📊 Generate CSV reports
+- 📄 Generate TXT reports
+- 📦 Download all reports as a ZIP archive
+- 🕒 Include report generation date and time
+- 🛡️ Handle API rate limits and request errors
+- ⏱️ Request timeout protection
+- 🧪 Automated testing with pytest
+- ⚙️ GitHub Actions continuous integration
+- 🌐 Public Streamlit web application
+
+## 🛠️ Technologies Used
 
 - Python
+- Streamlit
 - GitHub REST API
 - Requests
 - JSON
@@ -43,65 +53,48 @@ The application accepts search criteria from the user, communicates with the Git
 - Git
 - GitHub
 - GitHub Actions
+- Streamlit Community Cloud
 
-## Project Structure
+## 📁 Project Structure
 
-```text
-github-repository-automation/
-│
-├── .github/
-│   └── workflows/
-│       └── python-tests.yml
-│
-├── tests/
-│   └── test_github_pipeline.py
-│
-├── github_main.py
-├── github_pipeline_functions.py
-├── requirements.txt
-├── .gitignore
-└── README.md
-```
+| File / Directory | Purpose |
+|---|---|
+| `.github/workflows/python-tests.yml` | GitHub Actions CI workflow |
+| `tests/test_github_pipeline.py` | Automated pytest test suite |
+| `app.py` | Streamlit web application |
+| `github_main.py` | Command-line application entry point |
+| `github_pipeline_functions.py` | GitHub API, filtering, sorting, pagination, and report functions |
+| `requirements.txt` | Python project dependencies |
+| `.gitignore` | Excludes local and generated files from Git |
+| `README.md` | Project documentation |
 
-## Demo
-
-The application provides an interactive workflow for discovering GitHub repositories.
-
-### Example
+## 🧩 Application Architecture
 
 ```text
-Search query: AI
-Number of repositories: 101
-Minimum stars: 0
-Language: None
-Sort: Recently Updated
-Report format: TXT
+User Input
+    ↓
+Search Query • Repository Count • Minimum Stars • Programming Language • Sorting Option
+    ↓
+GitHub REST API
+    ↓
+API Pagination
+    ↓
+Filtering & Sorting
+    ↓
+Repository Results
+    ↓
+Streamlit Interface
+    ↓
+Report Generation
+    ↓
+JSON / CSV / TXT
+    ↓
+ZIP Download
 ```
 
-The application then searches GitHub, retrieves the requested repositories using pagination, applies the selected filters and sorting method, and generates the requested report.
-
-Example result:
-
-```text
-Found 101 repositories.
-101 repositories matched your criteria.
-Pipeline completed successfully!
-```
-
-Generated reports can be exported as:
-
-- JSON
-- CSV
-- TXT
-- All reports
-
-## Installation
-
-Follow these steps to install and run the project on your computer.
+## 🚀 Installation
 
 ### 1. Clone the repository
-
-Open a terminal or PowerShell window and run:
 
 ```bash
 git clone https://github.com/Zeesh-cyber/github-repository-automation.git
@@ -133,30 +126,61 @@ For Windows PowerShell:
 pip install -r requirements.txt
 ```
 
-## Usage
+## 💻 Run the Command-Line Application
 
-Run the main Python program:
+Run:
 
 ```bash
 python github_main.py
 ```
 
-The program will ask for:
+The command-line application allows the user to enter:
 
 - GitHub search query
-- Number of repositories to retrieve
-- Minimum number of stars
+- Number of repositories
+- Minimum stars
 - Programming language
-- Sorting method
+- Sorting preference
 - Report format
 
-The application then searches GitHub, retrieves the requested repositories, applies the selected filters and sorting options, and automatically generates the requested report.
+## 🌐 Run the Streamlit Application Locally
 
-## Report Formats
+To launch the web interface:
+
+```bash
+streamlit run app.py
+```
+
+Streamlit will provide a local URL such as:
+
+```text
+http://localhost:8501
+```
+
+Open that address in your browser.
+
+## 🔎 Streamlit Web Interface
+
+The web application provides:
+
+- GitHub repository search
+- Repository count selection
+- Minimum-star filtering
+- Programming-language filtering
+- Repository sorting
+- Repository result cards
+- Direct GitHub repository links
+- Report format selection
+- Individual report downloads
+- Combined ZIP report download
+
+## 📊 Report Formats
 
 ### JSON
 
-Structured repository data suitable for applications and further automation.
+Structured repository data suitable for applications, scripts, and further automation.
+
+Generated file:
 
 `pipeline_results.json`
 
@@ -164,135 +188,196 @@ Structured repository data suitable for applications and further automation.
 
 Tabular repository data suitable for spreadsheets and data analysis.
 
+Generated file:
+
 `pipeline_results.csv`
 
 ### TXT
 
-A human-readable summary report.
+Human-readable repository summary containing repository information and report generation time.
+
+Generated file:
 
 `pipeline_report.txt`
 
-The TXT report includes the date and time when the report was generated.
+### All Reports
 
-## Example Workflow
+The Streamlit application can package all three reports into a single ZIP archive.
 
-```text
-Enter GitHub search query
-        ↓
-Specify number of repositories
-        ↓
-Set minimum star count
-        ↓
-Select programming language
-        ↓
-Select sorting method
-        ↓
-Search GitHub API
-        ↓
-Retrieve repositories
-        ↓
-Use pagination when required
-        ↓
-Filter and sort results
-        ↓
-Generate report
-        ↓
-JSON / CSV / TXT
-```
+Generated file:
 
-## Testing
+`github_repository_reports.zip`
 
-This project uses `pytest` for automated testing.
+The ZIP contains:
 
-Run the complete test suite with:
+- `pipeline_report.txt`
+- `pipeline_results.csv`
+- `pipeline_results.json`
+
+## 🧪 Testing
+
+This project uses pytest for automated testing.
+
+Run the complete test suite:
 
 ```bash
-python -m pytest
+pytest
 ```
 
-The test suite verifies:
+The test suite verifies functionality including:
 
-- GitHub repository searching
-- Repository searching without a language filter
-- Repository searching with a language filter
+- Repository searching
+- Programming-language filtering
 - API pagination
-- Repository star filtering
-- JSON file generation
-- CSV file generation
+- Minimum-star filtering
+- JSON report generation
+- CSV report generation
 - TXT report generation
-- File creation and report contents
 
 ### Current Test Result
 
-```text
-7 passed
-```
+**7 tests passed**
 
-## Continuous Integration
+## ⚙️ Continuous Integration
 
-This project uses GitHub Actions to automatically run the test suite when changes are pushed to the `main` branch or when a pull request targets the `main` branch.
+GitHub Actions automatically runs the test suite when changes are pushed to the `main` branch or when a pull request targets `main`.
+
+Workflow file:
+
+`.github/workflows/python-tests.yml`
 
 The workflow:
 
 1. Checks out the repository
 2. Sets up Python
 3. Installs project dependencies
-4. Runs the complete pytest test suite
+4. Runs the pytest test suite
+5. Reports the workflow status
 
 A successful workflow run confirms that the automated tests are passing.
 
-## Error Handling
+## 🛡️ Error Handling
 
-The application handles common problems such as:
+The application handles common problems including:
 
-- Invalid user input
+- Empty search queries
+- Invalid numeric values
 - Empty search results
 - GitHub API rate limits
 - GitHub API request failures
 - Network errors
 - Request timeouts
-- Invalid numeric values
+- Invalid sorting selections
 
-## Skills Demonstrated
+## 🔄 API Pagination
+
+GitHub repository search results are returned through paginated API responses.
+
+The application automatically requests additional pages when the requested repository count requires more results than a single API response can provide.
+
+Pagination was validated with a live GitHub API search requesting more than 100 repositories.
+
+## 📋 Example Workflow
+
+```text
+Enter Search Criteria
+        ↓
+Search GitHub REST API
+        ↓
+Retrieve Repository Data
+        ↓
+Apply Language Filter
+        ↓
+Apply Minimum-Star Filter
+        ↓
+Sort Results
+        ↓
+Handle API Pagination
+        ↓
+Display Repository Results
+        ↓
+Generate Reports
+        ↓
+JSON / CSV / TXT
+        ↓
+Optional ZIP Download
+```
+
+## 🎯 Skills Demonstrated
 
 This project demonstrates practical experience with:
 
 - Python programming
-- Functions and modular programming
+- Modular application design
 - REST API integration
-- HTTP requests
 - GitHub API usage
-- JSON data handling
-- CSV file generation
-- Text file generation
+- HTTP requests
+- API pagination
+- Data filtering
+- Data sorting
+- JSON processing
+- CSV generation
+- TXT report generation
+- ZIP file creation
 - Exception handling
 - Input validation
 - File handling
-- Date and time handling
-- Repository filtering
-- Repository sorting
-- API pagination
 - Automated testing with pytest
-- GitHub Actions CI
+- GitHub Actions
 - Git version control
 - GitHub repository management
+- Streamlit application development
+- Cloud application deployment
+- Technical documentation
 
-## Future Improvements
+## 🔐 Repository Hygiene
+
+Generated reports, virtual-environment files, Python cache directories, and other local development files are excluded through `.gitignore`.
+
+The repository keeps source code, tests, configuration, documentation, and CI workflow files under version control.
+
+## 📈 Development Milestones
+
+- Initial GitHub repository automation
+- Professional project documentation
+- GitHub Actions CI workflow
+- Programming-language filtering
+- Repository sorting
+- API pagination
+- Expanded automated testing
+- Seven-test pytest suite
+- Live API validation
+- Streamlit web interface
+- Public Streamlit deployment
+- Downloadable JSON, CSV, and TXT reports
+- Combined ZIP report download
+- Final repository presentation
+
+## 🔮 Future Improvements
 
 Possible future improvements include:
 
-- GitHub API authentication for higher API rate limits
-- Advanced repository filtering
-- Logging
-- Configuration files
-- More extensive automated testing
-- GitHub Actions CI/CD improvements
-- Scheduled repository searches
+- GitHub API authentication for higher rate limits
+- Advanced repository search filters
 - Additional report formats
-- Web-based interface
+- Configurable application settings
+- Structured logging
+- Scheduled repository searches
+- More extensive automated test coverage
+- Additional Streamlit UI enhancements
+- Advanced visualizations
+- Improved responsive design
 
-## Author
+## 👨‍💻 Author
 
-Zeeshan Hassan
+**Zeeshan Hassan**
 
-GitHub: https://github.com/Zeesh-cyber
+GitHub:  
+https://github.com/Zeesh-cyber
+
+Project Repository:  
+https://github.com/Zeesh-cyber/github-repository-automation
+
+## 📜 License
+
+This project is intended as a portfolio and demonstration project for Python automation, REST API integration, testing, GitHub Actions, and Streamlit application development.
